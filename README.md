@@ -1,103 +1,54 @@
-[![Build Status](https://travis-ci.org/Samourai-Wallet/samourai-wallet-android.svg?branch=develop)](https://travis-ci.org/Samourai-Wallet/samourai-wallet-android)
+# Tsunami Wallet
 
-# Samourai Wallet
+* This is a fork of Samourai Wallet - Add credit goes to the original developers for a great model to work off *
 
-### Features:
+Tsunami wallet aims to provide enhanced privacy on Ethereum. The main objectives are to improve privacy in an adversarial environment.
+The end goal is to enable someone to create a transaction with no possible link with the origin, even from highly sophisticated adversaries.
 
-[Samourai Wallet features list](Samourai-Wallet-features.md)
+The main leaks of privacy it aims to improve upon are:
+- IP address & timing lookup linkability
+- Address linkability
+
+
+### IP address linkability
+
+Ethereum does not have a feasible SPV mode available at this time. Mobile users hoping to connect to the Ethereum network are required to do so though a node provider.
+This node provider will have access to a few key datapoints the user:
+1. The IP address of the user
+2. The addresses & contracts the user is interested in
+
+To prevent IP address leaks, all network connections through Tsunami Wallet are through TOR. This provides one level of privacy, in that the IP address of the user is never disclosed to the node operator.
+
+The next problem is timing analysis. If a node operator sees a Tor IP looking up the balance of 3 different addresses at almost the same time, they could make the assumption that the three addresses may be linked in some way.
+
+It is for this reason that Tsunami wallet has two distict wallets. A regular ethereum wallet, and a "private" ethereum wallet.
+
+Care needs to be taken to not request balances of either wallet at the same time.
+
+### Address privacy
+For address link-ability, ZK proofs are used, and attempts are make to prevent the user from accidentally making transactions that can leak privacy.
+Initially, the Aztec protocol was used, but until Aztec 2.0 is launched, it is not feasible for address privacy.
+The current version uses Tornado.cash for address privacy. Tornado.cash only allows for fixed deposit amounts.
+
+The main method that a user can link a Tornado deposit to a Tornado withdrawal are:
+1. Sending a transaction outside Tornado from the deposit address to the withdrawal address (or vice versa)
+2. Depositing a specific amount and withdrawing the exact same amount to the withdrawal address
+3. Depositing and withdrawing at almost the same time
+
+Tsunami wallet has features in place to try to block users from making these mistakes. This means:
+1. Tsunami wallet will never let you directly transfer from your private addresses to your non-private address
+2. Tsunami wallet uses multiple withdrawal addresses for private balances, as opposed to a single address
+3. It enforces a randomized time before it allows you to redeem a Tornado.cash note
+
+Tornado Cash notes are encrypted using the wallets private key and saved to the devices local storage.
+Eventually, they will be backed up somewhere. As it stands, if the user un-installs the wallet, all notes will be lost.
 
 ### Build:
 
 Import as Android Studio project. Should build "as is". PGP signed tagged releases correspond to builds that were issued via Google Play.
 
-### BIP44:
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki), extends [bitcoinj](https://bitcoinj.github.io/).
-
-### BIP47:
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0047.mediawiki) by Justus Ranvier. Extends BIP44 implementation (above). Further modifications have been made to incorporate Segwit addresses into BIP47.
-
-[Generic source code for BIP47.](https://github.com/SamouraiDev/BIP47_RPC)
-
-[BIP47 test vectors](https://gist.github.com/SamouraiDev/6aad669604c5930864bd)
-
-### BIP49 (Segwit):
-
-Samourai P2SH-P2WPKH implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki) by Daniel Weigl and includes support for BIP49-specific XPUBs: [YPUB](https://github.com/Samourai-Wallet/sentinel-android/issues/16).
-
-### BIP69:
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0069.mediawiki) by Kristov Atlas.
-
-### BIP84 (Segwit):
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki) by Pavol Rusnak.
-
-### BIP125 (Replace-by-fee, RBF):
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki) by David A. Harding and Peter Todd.
-
-### BIP141 (Segwit):
-
-Samourai spends to bech32 addresses P2WPKH based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) by Eric Lombrozo, Johnson Lau and Pieter Wuille.
-
-### BIP173 (Segwit):
-
-Samourai implementation based on [original BIP](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) by Pieter Wuille and Greg Maxwell.
-
-### Spending:
-
-Samourai spends include the possibility of including custom fees as well as the use of batch spending (build up a list of batched outputs for grouped spend and fee savings).
-
-### Ricochet:
-
-Samourai implementation of multi-hop spend designed to outrun the baying pack of #KYCRunningDogs.
-
-Ricochet using nLockTime (staggered) will spread out hops over different blocks and make sure that hops do not appear all at once in the mempool.
-
-### STONEWALL:
-
-STONEWALL spend is designed to increase the number of combinations between inputs and outputs (transaction entropy). It replaces the previously used BIP126. The objective is to obtain a positive entropy score using [Boltzmann](https://github.com/Samourai-Wallet/boltzmann) evaluation of the transaction.
-
-### Stowaway:
-
-A Stowaway spend, also implemented as [PayJoin](https://joinmarket.me/blog/blog/payjoin/), is a collaborative-spend carried out with another user. UTXOs are joined and the spend amount is cloaked. It is based on an [idea](https://bitcointalk.org/index.php?topic=139581.0) by Gregory Maxwell. 
-
-### Tor:
-
-Samourai indicates whether or not connections are being routed via Tor Socks5 proxy (uses Orbot).
-
-### TestNet3:
-
-MainNet/TestNet selection is displayed when sideloading a new installation. To switch networks, make a backup of your current wallet, uninstall/reinstall (sideload) and select desired network.
-
-### OpenDime:
-
-Plug in your OpenDime using the appropriate OTG (On-The-Go) USB cable and Samourai can be used to view address and balance, validate the private key, and sweep balance to your wallet.
 
 ### License:
 
 [Unlicense](https://github.com/Samourai-Wallet/samourai-wallet-android/blob/master/LICENSE)
 
-### Contributing:
-
-All development goes in 'develop' branch - do not submit pull requests to 'master'.
-
-### Dev contact:
-
-[PGP](http://pgp.mit.edu/pks/lookup?op=get&search=0x72B5BACDFEDF39D7)
-
-### What we do:
-
-[Samourai HQ](https://samouraiwallet.com)
-
-[Sentinel](https://play.google.com/store/apps/details?id=com.samourai.sentinel&hl=en)
-
-[PayNym.is](https://paynym.is)
-
-[OXT](https://oxt.me)
-
-[Sovereign.ly](http://sovereign.ly)
-
-[Mule Tools](http://mule.tools)

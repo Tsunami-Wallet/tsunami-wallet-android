@@ -49,12 +49,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/tx_swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_txes"
@@ -66,9 +66,7 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <com.github.clans.fab.FloatingActionMenu
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,20 +85,10 @@
             android:id="@+id/whirlpool_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_whirlpool"
+            android:src="@drawable/tornadologo"
             fab:fab_colorNormal="@color/whirlpoolBlue"
             fab:fab_colorPressed="@color/whirlpoolBlue"
             fab:fab_label="@string/action_whirlpool"
-            fab:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/paynym_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_paynym_white_24dp"
-            fab:fab_colorNormal="#FF673ab7"
-            fab:fab_colorPressed="#FF512da8"
-            fab:fab_label="@string/action_bip47"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
